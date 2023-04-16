@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+      <h1>This is log page</h1>
+
+      <p><b>Email:</b><br>
+          <input id="email" type="text" size="40">
+      </p>
+
+      <p><b>Password:</b><br>
+          <input id="password" type="text" size="40">
+      </p>
+
+      <button id="log_in">Log in</button>
+
+    <script>
+        document.querySelector("#log_in").onclick = function(){
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+
+            let xhr = new XMLHttpRequest();
+
+            let params = 'email=' + encodeURIComponent(email) +
+                '&password' + encodeURIComponent(password);
+
+            xhr.open("POST", '/acc?' + params, true);
+
+            xhr.send()
+        }
+    </script>
+</body>
+</html>

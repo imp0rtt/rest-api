@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PORTAL PANEL</title>
+</head>
+<body>
+<h1>Test panel</h1>
+
+<button id="get_list">Get list of users</button>
+
+
+<p><b>User ID:</b><br>
+  <input type="text" id="user_id" size="40">
+</p>
+
+<button id="get_user">Get user by id</button>
+
+<button id="delete_user">Delete user by id</button>
+
+<button id="main">Main page</button>
+
+<script>
+  document.querySelector("#get_list").onclick = function(){
+    // let x = new XMLHttpRequest();
+    // x.open("GET", "/log", true);
+    // x.onload = function (){
+    //
+    // }
+    // x.send(null);
+    document.location.href = 'http://localhost:1234/users'
+  }
+
+  document.querySelector("#get_user").onclick = function(){
+    // document.location.href = 'http://localhost:1234/main'
+    let val = document.getElementById('user_id').value;
+    if (val.length >= 5) {
+      document.location.href = 'http://localhost:1234/users/' + val
+    } else {
+      alert("Empty field")
+    }
+
+  }
+
+  document.querySelector("#delete_user").onclick = function(){
+    // document.location.href = 'http://localhost:1234/main'
+    let val = document.getElementById('user_id').value;
+    if (val.length >= 5) {
+
+      let xhr = new XMLHttpRequest();
+      xhr.open("DELETE", '/users/' + val, true);
+      xhr.send()
+
+      alert("User deleted!")
+    } else {
+      alert("Empty field")
+    }
+
+  }
+
+  document.querySelector("#main").onclick = function(){
+    document.location.href = 'http://localhost:1234/main'
+  }
+</script>
+</body>
+</html>

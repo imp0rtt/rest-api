@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PORTAL MAIN</title>
+</head>
+<body>
+    <h1>P{}RTAL</h1>
+
+    <button id="author">Авторизация</button>
+
+    <button id="reg">Регистрация</button>
+
+    <button id="panel">Test panel</button>
+
+    <script>
+        document.querySelector("#author").onclick = function(){
+            document.location.href = 'http://localhost:1234/log'
+        }
+
+        document.querySelector("#reg").onclick = function(){
+            document.location.href = 'http://localhost:1234/reg'
+        }
+
+        document.querySelector("#panel").onclick = function(){
+            document.location.href = 'http://localhost:1234/panel'
+        }
+    </script>
+</body>
+</html>
