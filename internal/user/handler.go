@@ -36,7 +36,7 @@ func (h *handler) Register(router *httprouter.Router) {
 	router.HandlerFunc(http.MethodGet, regURL, apperror.Middleware(h.Registration))
 	router.HandlerFunc(http.MethodGet, logURL, apperror.Middleware(h.LogIn))
 	router.HandlerFunc(http.MethodGet, panelURL, apperror.Middleware(h.Panel))
-	router.HandlerFunc(http.MethodPost, getaccURL, apperror.Middleware(h.GetAcc))
+	router.HandlerFunc(http.MethodGet, getaccURL, apperror.Middleware(h.GetAcc))
 	router.HandlerFunc(http.MethodGet, usersURL, apperror.Middleware(h.GetList))
 	router.HandlerFunc(http.MethodPost, usersURL, apperror.Middleware(h.CreateUser))
 	router.HandlerFunc(http.MethodGet, userURL, apperror.Middleware(h.GetUserByUUID))
@@ -78,12 +78,10 @@ func (h *handler) Panel(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (h *handler) GetAcc(w http.ResponseWriter, r *http.Request) error {
-	err := h.service.GetAcc(r)
+	err := h.service.GetAcc(w, r)
 	if err != nil {
 		return err
 	}
-
-	//TODO redirect to panel page
 	return nil
 }
 

@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"html/template"
 	"net/http"
 	"path/filepath"
@@ -20,7 +22,6 @@ func NewService(storage Storage, logger *logging.Logger) *Service {
 }
 
 func (s *Service) MainPage(w http.ResponseWriter) error {
-
 	tmpl, err := template.ParseFiles("public/html/main/index.html")
 	if err != nil {
 		return err
@@ -67,19 +68,30 @@ func (s *Service) PanelPage(w http.ResponseWriter) error {
 	return nil
 }
 
-func (s *Service) GetAcc(r *http.Request) error {
+func (s *Service) GetAcc(w http.ResponseWriter, r *http.Request) error {
 	email := r.URL.Query().Get("email")
 	password := r.URL.Query().Get("password")
+
 	user, err := s.storage.FindByEmail(context.Background(), email)
 	if err != nil {
 		return err
 	}
+
 	pass := user.PasswordHash
-	if pass == password {
+	newSha := sha256.New()
+	newSha.Write([]byte(pass))
+	sha256PasswordHash := hex.EncodeToString(newSha.Sum(nil))
+
+	if sha256PasswordHash == password {
+		http.Redirect(w, r, "http://localhost:1234/panel", http.StatusSeeOther)
+		s.logger.Debug("redirect to panel")
 		return nil
-	} else {
-		return err
 	}
+
+	http.Redirect(w, r, "http://localhost:1234/log", http.StatusSeeOther)
+	s.logger.Debug("redirect to log, error")
+
+	return err
 }
 
 func (s *Service) LogPage(w http.ResponseWriter) error {

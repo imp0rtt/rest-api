@@ -3,33 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-      <h1>This is log page</h1>
 
-      <p><b>Email:</b><br>
-          <input id="email" type="text" size="40">
-      </p>
+<style>
 
-      <p><b>Password:</b><br>
-          <input id="password" type="text" size="40">
-      </p>
+    @import url(//fonts.googleapis.com/css?family=Lato:300:400);
 
-      <button id="log_in">Log in</button>
+    .title {
+        color: #fff;
+        font-family: 'Montserrat', sans-serif;
+        text-align: left;
+        margin: 0;
+        padding: 5px;
+    }
+
+    .button {
+        color: #fff;
+        background: #5255ce;
+        border: none;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 20px;
+        font-family: 'Montserrat', sans-serif;
+        margin: 5px;
+    }
+
+    .button:hover {
+        color: black;
+        background-color: white;
+    }
+
+    body {
+        margin: 0;
+    }
+    h1 {
+        font-family: 'Lato', sans-serif;
+        font-weight: 300;
+        letter-spacing: 2px;
+        font-size: 48px;
+    }
+    p {
+        font-family: 'Lato', sans-serif;
+        letter-spacing: 1px;
+        font-size: 14px;
+        color: #333333;
+    }
+    .header {
+        text-align: center;
+        background: linear-gradient(60deg, rgba(84, 58, 183, 1) 0%, rgba(0, 172, 193, 1) 100%);
+        color: white;
+    }
+    .flex {
+        /*Flexbox for containers*/
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    .content {
+        position: relative;
+        height: 10vh;
+        text-align: center;
+        background-color: white;
+    }
+
+    /*Shrinking for mobile*/
+    @media (max-width: 768px) {
+        .content {
+            height: 30vh;
+        }
+        h1 {
+            font-size: 24px;
+        }
+    }
+</style>
+
+
+<div class="header">
+    <h1 class="title">This is log page</h1>
+    <div class="inner-header flex">
+
+        <p><b>Email:</b><br>
+            <input id="email" type="text" size="40">
+        </p>
+
+        <p><b>Password:</b><br>
+            <input id="password" type="password" size="40">
+        </p>
+
+        <button class="button" id="log_in">Log in</button>
+    </div>
+
+</div>
+
 
     <script>
-        document.querySelector("#log_in").onclick = function(){
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+
+        document.querySelector("#log_in").onclick = async function () {
             let email = document.getElementById('email').value;
             let password = document.getElementById('password').value;
 
-            let xhr = new XMLHttpRequest();
+            let passwordHash = sha256(password)
 
-            let params = 'email=' + encodeURIComponent(email) +
-                '&password' + encodeURIComponent(password);
+            console.log(passwordHash)
 
-            xhr.open("POST", '/acc?' + params, true);
+            let params = 'email=' + email +
+                '&password=' + (await passwordHash);
 
-            xhr.send()
+            document.location.href = 'http://localhost:1234/acc?' + params
+
         }
     </script>
 </body>
